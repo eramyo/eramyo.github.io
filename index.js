@@ -1,0 +1,17 @@
+const row_div = document.createElement('div')
+const column_div = document.createElement('div')
+const card_div = document.createElement('div')
+const cardbody_div = document.createElement('div')
+const h5 = document.createElement('h5')
+const a = document.createElement('a')
+const p = document.createElement('p')
+const img = document.createElement('img')
+const body = document.querySelector('body');
+
+row_div.setAttribute('class', 'row')
+column_div.setAttribute('class', 'col-lg-4 col-md-6 col-12 pb-5')
+card_div.setAttribute('class', 'card')
+img.setAttribute('class', 'card-img-top')
+img.setAttribute('src', 'images/service4.jpg')
+cardbody_div.setAttribute('class', 'card-body')
+h5.setAttribute('class','card-title')
