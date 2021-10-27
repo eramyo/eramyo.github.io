@@ -1,3 +1,101 @@
+<?php>
+
+    $error = '';
+    $name = '';
+    $email = '';
+    $message = '';
+
+    function clean_text($string){
+        $string = trim($string);
+        $string = stripslashes($string);
+        $string = htmlspecialchars($string);
+        return $string;
+    }
+
+    if(isset($_POST["submit"])){
+
+        if(empty($_POST["name"])){
+
+            $error .= '<p><label class = "text-danger">Please enter your name</label></p>';
+
+        }else{
+
+            $name = clean_text($_POST["name"]);
+
+            if(!preg_match("/^[a-zA-Z]*$/",$string)){
+                $error .= '<p><label class = "text-danger">Only letters allowed for name</label></P>';
+            }
+
+        }
+
+        if(empty($_POST["email"])){
+            
+            $error .= '<p><label class = "text-danger">Please enter your email</label></P>';
+
+        }else{
+
+            $email = clean_text($_POST["email"]);
+            if(!filter_var($string, FILTER_VALIDATE_EMAIL)){
+                $error .= '<p><label class = "text-danger">Please enter a valid email</label></P>';
+            }
+
+        }
+
+        if(empty($_POST["message"])){
+
+            $error .= '<p><label class = "text-danger">Please enter your message</label></P>';
+
+        }else{
+
+            $message = clean_text($_POST["message"]);
+
+        }
+
+        if($error != ''){
+
+            require 'class/PHPMailer.php';
+            require 'class/SMTP.php'; 
+
+            $mail = new PHPMailer(true);
+
+            try{
+            $mail ->SMTPDebug = SMTP::DEBUG_SERVER;
+            $mail -> IsSMTP();
+            $mail ->Host = 'smtp.gmail.net';
+            $mail ->Port = '465';
+            $mail ->SMTPAuth = 'true';
+            $mail ->Username = 'calvineromio@gmail.com';
+            $mail ->Password = 'caniuseyou2@gmail.com';
+            $mail ->SMTPSecure = 'PHPMailer::ENCRYPTION_SMTPS';
+            $mail ->setFrom = $_POST["email"];
+            $mail ->FromName = $_POST["name"];
+            $mail ->AddAdress('calvineromio@gmail.com','Calvin');
+            $mail-> addReplyTo($_POST["email"]);
+            $mail ->AddCC($_POST["email"], $_POST["name"]);
+            $mail ->wordwrap = 50;
+            $mail ->isHTML(true);
+            $mail ->Subject = 'About eratech';
+            $mail ->Body = $_POST["message"];
+
+            if($mail->Send()){
+                $error = '<p><label class = "text-success">Thank you for contacting Me</label></P>';
+            }else{
+                $error .= '<p><label class = "text-danger">Sorry! an error occured</label></P>';
+            }
+        }catch(Exception $e){
+            echo "Message could not be sent. Mailer Error:{$mail->ErrorInfo}";
+        }
+            $name ='';
+            $email = '';
+            $message = '';
+
+        }
+
+    }
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
